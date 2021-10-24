@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-
-namespace ToDo.Core.Entities
+namespace ToDo.Web.Models.ViewModel
 {
-   public class ToDoItem : AuditableEntity
+    public class TodoItemCreateViewModel
     {
-        public int Id { get; set; }
-
         [Required]
+        [MinLength(3)]
+        [MaxLength(50)]
         public string Description { get; set; }
 
-        public bool IsDone { get; set; }
-        public string UserId { get; set; }
+     
 
+        
     }
 }

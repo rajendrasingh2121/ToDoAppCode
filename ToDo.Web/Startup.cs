@@ -8,9 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ToDo.Application.Interfaces;
 using ToDo.Application.Services;
 using ToDo.Infrastructure;
 using ToDo.Infrastructure.Data;
+using ToDo.Infrastructure.Interfaces;
+using ToDo.Infrastructure.Repositories;
 
 namespace ToDo.Web
 {
@@ -28,7 +31,7 @@ namespace ToDo.Web
         {
             DbInjection.AddInfrastructure(services);
 
-
+            services.AddScoped<IToDoRepository, ToDoRepository>();
             services.AddScoped<ITodoItemService, TodoItemService>();
           
             services.ConfigureApplicationCookie(options =>
@@ -72,10 +75,11 @@ namespace ToDo.Web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-
 
         }
     }

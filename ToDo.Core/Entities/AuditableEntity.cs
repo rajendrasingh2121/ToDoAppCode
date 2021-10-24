@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ToDo.Core.Common
+namespace ToDo.Core.Entities
 {
     public abstract class AuditableEntity
     {

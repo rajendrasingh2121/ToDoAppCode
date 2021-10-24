@@ -21,17 +21,18 @@ namespace ToDo.Infrastructure.Data
             {
                 var testUser1 = new ApplicationUser
                 {
-                    Id = "testuser1",
+                    Id = "test",
                     UserName = "test",
                     Email = "test@gmail.com"
                 };
 
-                IdentityResult result = userManager.CreateAsync(testUser1, "pwd1234").Result;
+                IdentityResult result = userManager.CreateAsync(testUser1, "pwd123").Result;
+            
                 if (result.Succeeded)
                 {
                     var testPost1 = new ToDoItem
                     {
-                        Id = "def234",
+                        Id = 1,
                         UserId = testUser1.Id,
                         Description = "test1",
                         IsDone = false

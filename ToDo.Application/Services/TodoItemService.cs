@@ -4,55 +4,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToDo.Application.Interfaces;
 using ToDo.Core.Entities;
+
 using ToDo.Infrastructure.Data;
+using ToDo.Infrastructure.Interfaces;
 
 namespace ToDo.Application.Services
 {
     public class TodoItemService : ITodoItemService
     {
-        private readonly ApplicationDbContext _context;
-        public TodoItemService(ApplicationDbContext context)
+        public IToDoRepository _todoRepository;
+        public TodoItemService(IToDoRepository todoRepository)
         {
-            _context = context;
+            _todoRepository = todoRepository;
         }
 
-        public async Task<bool> AddItemAsync(ToDoItem newItem, User user)
+        public Task<bool> AddItemAsync(ToDoItem newItem)
         {
-            var entity = new ToDoItem
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserId = user.Id,
-                IsDone = false,
-                Description = newItem.Description
-               
-            };
-
-            _context.ToDoItems.Add(entity);
-
-            var saveResult = await _context.SaveChangesAsync();
-            return saveResult == 1;
+            return _todoRepository.AddTodoItems(newItem);
         }
 
-        public async Task<IEnumerable<ToDoItem>> GetIncompleteItemsAsync(User user)
+        public Task<bool> DeleteItemAsync(ToDoItem newItem)
         {
-            return await _context.ToDoItems
-                .Where(x => x.IsDone == false && x.UserId == user.Id)
-                .ToArrayAsync();
+            throw new NotImplementedException();
+        }
+        
+
+        public async Task<IEnumerable<ToDoItem>> GetIncompleteItemsAsync(string userId)
+        {        
+            return await _todoRepository.GetToDoItems(userId);
         }
 
-        public async Task<bool> MarkDoneAsync(Guid id, User user)
+        public Task<bool> MarkDoneAsync(ToDoItem newItem)
         {
-            var item = await _context.ToDoItems
-                .Where(x => x.Id == id.ToString() && x.UserId == user.Id)
-                .SingleOrDefaultAsync();
-
-            if (item == null) return false;
-
-            item.IsDone = true;
-
-            var saveResult = await _context.SaveChangesAsync();
-            return saveResult == 1; // One entity should have been updated
+            throw new NotImplementedException();
         }
     }
 }
