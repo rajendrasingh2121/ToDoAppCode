@@ -16,8 +16,6 @@ namespace ToDo.Core.Entities
         public string Description { get; set; }
 
         public bool IsDone { get; set; }
-
-        public User User { get; set; }
         public string UserId { get; set; }
 
     }

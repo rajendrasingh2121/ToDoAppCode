@@ -22,33 +22,18 @@ namespace ToDo.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("CleanArchitectureDb"));
 
-           /// services.AddIdentityCore<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            services.AddDefaultIdentity<ApplicationUser>(options => {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultUI().AddDefaultTokenProviders();
             return services;
         }
 
-        public static void AddTestData(ApplicationDbContext context)
-        {
-            var testUser1 = new User
-            {
-                Id = "abc123",
-                FirstName = "Luke",
-                LastName = "Skywalker"
-            };
-
-            context.Users.Add(testUser1);
-
-            var testPost1 = new ToDoItem
-            {
-                Id = "def234",
-                UserId = testUser1.Id,
-                Description ="test1",
-                IsDone=false
-            };
-
-            context.ToDoItems.Add(testPost1);
-
-            context.SaveChanges();
-        }
+      
     }
         
 }

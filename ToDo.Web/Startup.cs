@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ToDo.Application.Services;
+using ToDo.Infrastructure;
+using ToDo.Infrastructure.Data;
 
 namespace ToDo.Web
 {
@@ -23,8 +26,23 @@ namespace ToDo.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            DbInjection.AddInfrastructure(services);
+
+
+            services.AddScoped<ITodoItemService, TodoItemService>();
+          
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                
+            });
+
+            services.AddControllersWithViews();
             services.AddRazorPages();
+            //services.AddRazorPages(o => o.Conventions.AddPageRoute("/Index", ""));
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,14 +61,22 @@ namespace ToDo.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // /var context = app.ApplicationServices.GetService<ApplicationDbContext>();
+            //  DbInjection.AddTestData(context);
+            app.UseAuthentication();
+
             app.UseRouting();
 
+          
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
                 endpoints.MapRazorPages();
             });
+
+
         }
     }
 }
